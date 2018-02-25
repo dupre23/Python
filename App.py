@@ -57,13 +57,15 @@ class DatabaseApp():
 
     def main(self):
         from Sql.SqlClass import SqlClass
-        with SqlClass(self.username, self.password) as x:
+        with SqlClass(self.username, self.password) as connection:
             while True:
                 UserOptions().listOptions()
                 user_option = UserOptions().getUserOption()
                 if user_option == '9':
                     print("Goodbye!")
                     break
+                else:
+                    connection.performAction(user_option)
 
 if __name__ == '__main__':
     Run = DatabaseApp()

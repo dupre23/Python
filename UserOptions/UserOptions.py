@@ -1,3 +1,5 @@
+import re
+
 class UserOptions():
     options = {'1': 'Add user', '9':'Exit'}
 
@@ -17,3 +19,19 @@ class UserOptions():
             else:
                 break
         return self.user_option
+
+    def getAddUserFields(self):
+        email_pattern = r'\S+@\S+.[a-z]{2,3}'
+        while True:
+            first_name = input("First name: ")
+            last_name = input("Last name: ")
+            if (len(first_name) or len(last_name)) < 2:
+                print("Invalid length for first_name/last_name")
+                continue
+            email = input("Email: ")
+            if not re.match(email_pattern, email):
+                print("Invalid email format")
+                continue
+            break
+        username = first_name[0:2] + last_name
+        return first_name, last_name, email, username
