@@ -1,7 +1,7 @@
 import re
 
 class UserOptions():
-    options = {'1': 'Add user', '9':'Exit'}
+    options = {'1': 'Add user', '2': 'Delete user', '3': 'List users','9':'Exit'}
 
     def listOptions(self):
         for option, action in UserOptions.options.items():
@@ -35,3 +35,30 @@ class UserOptions():
             break
         username = first_name[0:2] + last_name
         return first_name, last_name, email, username
+
+    def getDeleteUserFields(self):
+        while True:
+            delete_type = input("a-Delete by ID \nb-Delete by username\nEnter delete option: ")
+            if delete_type != "a" and delete_type != "b":
+                print("Invalid delete choice was introduced!")
+                continue
+            break
+        while True:
+            if delete_type == "a":
+                delete_id = input("Delete ID: ")
+                if not delete_id.isdigit():
+                    print("ID should be a digit!")
+                    continue
+            if delete_type == "b":
+                delete_username = input("Delete username: ")
+                if len(delete_username) == 0:
+                    print("Null username was introduced!")
+                    continue
+                if delete_username.isdigit():
+                    print("Username should not contain digits only!")
+                    continue
+            break
+        if delete_type == "a":
+            return delete_type, delete_id
+        else:
+            return delete_type, delete_username

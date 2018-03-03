@@ -38,6 +38,12 @@ class SqlClass():
         if option == "1":
             if not self.addUser():
                 print("Could not add user to database!")
+        if option == "2":
+            if not self.deleteUser():
+                print("Could not delete user from database!")
+        if option == "3":
+            if not self.listUsers():
+                print("Could not list users from database!")
 
     def addUser(self):
         if not self.getAvailableUserId():
@@ -54,6 +60,44 @@ class SqlClass():
         else:
             print("{} user was added to the database".format(values))
             return True
+
+    def deleteUser(self):
+        '''
+        Deletes a user by: A - user_id; B - username
+
+        Try/except statemets are not needed because the input was validated in getDeleteUserFields method
+        '''
+        delete_type, delete_field = UserOptions().getDeleteUserFields()
+        if delete_type == "a":
+            self.db_cursor.execute("SELECT user_id FROM users WHERE user_id={}".format(int(delete_field)))
+        if delete_type == "b":
+            self.db_cursor.execute("SELECT user_id FROM users WHERE username='{}'".format(delete_field))
+        res = self.db_cursor.fetchall()
+        if len(res) == 0:
+            print("Indicated user was not found in the database!")
+            return False
+        delete_id = res[0][0]
+        if delete_type == "a":
+            self.db_cursor.execute("DELETE FROM users WHERE user_id={}".format(delete_id))
+            self.db_cursor.execute("commit")
+        if delete_type == "b":
+            self.db_cursor.execute("DELETE FROM users WHERE user_id={}".format(delete_id))
+            self.db_cursor.execute("commit")
+        print("User was deleted")
+        return True
+
+    def listUsers(self):
+        self.db_cursor.execute("SELECT * FROM users")
+        res = self.db_cursor.fetchall()
+        if len(res) == 0:
+            print("The database is empty, there is nothing to display")
+            return True
+        print("\n{:<15} {:^15} {:^15} {:^15} {:>15}".format("User_id", "First_name", "Last_name", "Email", "Username"))
+        for item in res:
+            print("{:<15} {:^15} {:^15} {:^15} {:>15}".format(item[0], item[1], item[2], item[3], item[4]))
+        print("\n")
+        return True
+
 
     def getAvailableUserId(self):
         '''
