@@ -8,4 +8,4 @@ while True:
         print("Goodbye!")
         break
     else:
-        SshClass(host="127.0.0.1", user="user1", passwd="pass", port=2222).perform_action(user_option)
+        SshClass(host="127.0.0.1", user="vagrant", passwd="pass", port=2222).perform_action(user_option)

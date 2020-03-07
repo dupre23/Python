@@ -1,7 +1,10 @@
 import paramiko
+from YamlOp.YamlOperations import YamlOperations
 
 
 class SshClass:
+    local_netcfg_path = "./cfg/netcfg.yaml"
+
     def __init__(self, host, user, passwd, port=False):
         self.host = host
         self.user = user
@@ -58,3 +61,18 @@ class SshClass:
             self.delete_user()
         elif user_option == "3":
             self.verify_user()
+        elif user_option == "4":
+            self.get_network_config_file()
+            YamlOperations(SshClass.local_netcfg_path, "network_config").listNetworkConfig()
+
+    def get_network_config_file(self):
+        self.sftp = self.ssh.open_sftp()
+        remote_path="/etc/netplan/01-netcfg.yaml"
+        try:
+            self.sftp.get(remote_path, SshClass.local_netcfg_path)
+        except Exception as e:
+            print("Exception when trying to copy remote file: {}".format(remote_path), "\n", e)
+        else:
+            print("File remotely copied from: {}".format(remote_path))
+        finally:
+            self.sftp.close()

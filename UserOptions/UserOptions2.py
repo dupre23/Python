@@ -1,7 +1,8 @@
 from Ssh.SshClass import SshClass
 
 class UserOptions():
-    options = {'1': 'Add user', '2': 'Delete user', '3': 'Verify user','9':'Exit'}
+    options = {'1': 'Add user', '2': 'Delete user', '3': 'Verify user',
+               '4': 'List network config', '9':'Exit'}
 
     def listOptions(self):
         for option, action in UserOptions.options.items():
